@@ -1,0 +1,12 @@
+//commands
+$ solrctl instancedir --generate /tmp/film
+$ gedit /tmp/film/conf/schema.xml
+$ solrctl instancedir --create film /tmp/films
+$ solrctl collection --create films
+
+//Queries
+1.300
+2.ap*
+3.name:”24 People”~6
+4.initial_release_date:[2010 TO 2015])
+5.apo~1

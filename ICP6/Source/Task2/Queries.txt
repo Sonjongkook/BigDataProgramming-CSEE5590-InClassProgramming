@@ -1,0 +1,11 @@
+//Commands
+$ solrctl instancedir --generate $HOME/new_instance
+$ solrctl instancedir --create newcollection $HOME/new_instance
+$ solrctl collection --create newcollection -s 1
+
+//Queries
+1. inStock:false
+2. inStock:true AND author:George*
+3. price:[5 TO 7]
+4. price[5 TO 7] OR id:08*
+5. series_t:The* AND sequence_i:1
