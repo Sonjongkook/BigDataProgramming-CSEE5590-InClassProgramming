@@ -1,0 +1,19 @@
+[cloudera@quickstart ~]$ cd Downloads
+
+[cloudera@quickstart Downloads]$ ls
+shakespeare.txt word_list.txt
+
+[cloudera@quickstart Downloads]$ hdfs dfs -put shakespeare.txt /user/hadoop
+
+cloudera@quickstart Downloads]$ hdfs dfs -appendToFile word_list.txt /user/hadoop/shakespeare.txt
+
+[cloudera@quickstart Downloads]$ hdfs dfs -cat /user/hadoop/shakespeare.txt | head -n 5
+
+[cloudera@quickstart Downloads]$ hdfs dfs -cat /user/hadoop/shakespeare.txt | tail -n 5
+
+[cloudera@quickstart Downloads]$ hdfs dfs -cat /user/hadoop/shakespeare.txt | head -n 5 |hadoop fs -put - /user/hadoop/head.txt
+
+[cloudera@quickstart Downloads]$ hdfs dfs -cat /user/hadoop/shakespeare.txt | tail -n 5 |hadoop fs -put - /user/hadoop/tail.txt
+
+[cloudera@quickstart Downloads]$ hdfs dfs -text /user/hadoop/*.txt | hdfs dfs -put - /user/hadoop/Merged.txt
+
