@@ -1,0 +1,34 @@
+Task1
+sudo service mysqld start
+mysql -u root -pcloudera
+create database db1;
+use db1;
+create table acad(emp_id INT NOT NULL AUTO_INCREMENT,emp_name VARCHAR(100),emp_sal INT,PRIMARY KEY(emp_id) 
+insert into acad values(5,”jk”,30000), (6,”ej”, 700000),(7,”ella”,600000);
+select * from acad;
+sqoop import --connect jdbc:mysql://localhost/db1 --username root --password cloudera  --table acad --m 1
+hadoop fs -ls
+hadoop fs -ls acad/
+hadoop fs -cat acad/*
+create table newacad(emp_id INT NOT NULL AUTO_INCREMENT, emp_name VARCHAR(100), emp_sal INT, PRIMARY KEY(emp_id));
+sqoop export --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table newacad --export-dir /user/cloudera/ acad/part-m-00000
+
+Task2
+hive –f tables-schema.hql
+show tables;
+describe employees;
+create table emp(empid INT, emp_name STRING) row format delimited fields terminated by "," stored as textfile;
+load data local inpath "/home/cloudera/Downloads/emp.txt" into table emp;
+create table empNew(empid INT, emp_name VARCHAR(100));
+hadoop fs -ls /user/hive/warehouse/
+hadoop fs -ls /user/hive/warehouse/db1.db/
+sqoop export --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table empNew --export-dir /user/hive/warehouse/db1.db/emp -m 1
+sqoop import --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table newacad --m 1 --hive-import --hive-table Newemployee
+
+Task3
+create table shakespeare(text LONGTEXT);
+load data local infile '/home/cloudera/Downloads/Dataset/shakespeare/input/all-shakespeare.txt' into table article;
+sqoop import --connect jdbc:mysql://localhost/db1 --username root --password cloudera --table shakespeare --m 1 --hive-import --create-hive-table --hive-table new_shakespeare
+analyze table new_shakespeare compute statistics;
+select word, count(1) AS count FROM (SELECT explode(split(text, '\\s')) AS word FROM new_shakespeare) w GROUP BY word ORDER BY word;
+select regexp_replace(text, “LEONTES”, “LEON”) from new_shakespeare;
