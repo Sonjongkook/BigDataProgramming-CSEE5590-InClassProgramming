@@ -1,0 +1,35 @@
+$ echo "deb http://www.apache.org/dist/cassandra/debian 39x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list
+$ curl https://www.apache.org/dist/cassandra/KEYS | sudo apt-key add -
+$ sudo apt-get update
+$ sudo apt-get install Cassandra
+$ sudo service cassandra start
+
+$ create keyspace data with replication={'class':'SimpleStrategy', 'replication_factor':3};
+
+$ use data;
+$ create table data.employees (employee_id int PRIMARY KEY, department text, lastname text, year_with_company int, hiredate text, jobtitle text, salary int, managerid int);
+$ copy employees (employee_id, department, lastname, year_with_company, hiredate, jobtitle, salary, managerid) from '/home/jk/Downloads/employee_entries.csv' with DELIMITER='|' AND HEADER=TRUE;
+$ select * from employees;
+
+Query1
+$ select employee_id, lastname, jobtitle, hiredate from employees;
+Query2
+$ select lastname, salary from employees where jobtitle = 'clerk' ALLOW FILTERING;
+Query3
+$ select lastname, jobtitle, salary from employees where hiredate='2000-02-18' ALLOW FILTERING;
+Query4
+$ select lastname, salary from employees;
+Query5
+$ select lastname, salary, managerid from employees where salary=45000 ALLOW FILTERING;
+
+
+Bonus
+$ create table catfood (item_id int PRIMARY KEY, brand text, flavor text, can_price float);
+$ copy catfood (item_id, brand, flavor, can_price) from '/home/jk/Downloads/catfood_entries.csv' with DELIMITER='|' AND HEADER=TRUE;
+$SELECT * FROM catfood;
+$SELECT brand, can_price from catfood;
+
+$ select brand, can_price from catfood where flavor = ‘chicken’ ALLOW FILTERING;
+$ select item_id, brand, flavor from catfood where can_price<1.5 ALLOW FILTERING;
+$ select brand, flavor, can_price from catfood where can_price>1.5 AND flavor =”chicken” ALLOW FILTERING;
+$ select brand, flavor from catfood where brand=”Iams” ALLOW FILTERING;
